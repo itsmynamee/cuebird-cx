@@ -17,8 +17,18 @@ writeFileSync(originalGif, original);
 try {
   run("magick", [originalGif, "-coalesce", join(work, "original-%02d.png")]);
 
-  for (let frame = 0; frame < 39; frame += 1) {
+  for (let frame = 0; frame < 34; frame += 1) {
     copyFileSync(join(work, `original-${String(frame).padStart(2, "0")}.png`), join(work, `frame-${String(frame).padStart(2, "0")}.png`));
+  }
+
+  for (const [offset, opacity] of [0.75, 0.5, 0.25, 0.1, 0].entries()) {
+    run("magick", [
+      join(work, "original-33.png"),
+      "-channel", "RGB",
+      "-evaluate", "Multiply", String(opacity),
+      "+channel",
+      join(work, `frame-${offset + 34}.png`),
+    ]);
   }
 
   const states = [
