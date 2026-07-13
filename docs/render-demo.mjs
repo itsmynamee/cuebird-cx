@@ -10,8 +10,7 @@ const output = join(docs, "demo.gif");
 const work = mkdtempSync(join(tmpdir(), "cuebird-demo-"));
 const delays = [
   20, 20, 20, 20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
-  50, 20, 20, 20, 60, 40, 120, 10, 10, 50, 40, 220, 10, 10, 10, 10, 10, 50, 10, 10, 10, 10,
-  10, 10, 10, 10, 10, 10, 10, 90, 10, 10, 10, 10, 10, 290,
+  50, 20, 20, 20, 60, 40, 120, 10, 10, 50, 40, 220,
 ];
 
 const run = (command, args) => execFileSync(command, args, { stdio: "inherit" });
@@ -26,39 +25,31 @@ try {
     copyFileSync(join(work, `original-${String(frame).padStart(2, "0")}.png`), join(work, `frame-${String(frame).padStart(2, "0")}.png`));
   }
 
-  for (const [offset, opacity] of [0.75, 0.5, 0.25, 0.1, 0].entries()) {
+  let frame = 34;
+  for (const opacity of [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0]) {
     run("magick", [
       join(work, "original-33.png"),
       "-channel", "RGB",
       "-evaluate", "Multiply", String(opacity),
       "+channel",
-      join(work, `frame-${offset + 34}.png`),
+      join(work, `frame-${frame}.png`),
     ]);
+    delays.push(5);
+    frame += 1;
   }
 
   const states = [
-    { y: 500, opacity: 0, message: false },
-    { y: 360, opacity: 0.18, message: false },
-    { y: 300, opacity: 0.38, message: false },
-    { y: 250, opacity: 0.62, message: false },
-    { y: 220, opacity: 0.82, message: false },
-    { y: 204, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: false },
-    { y: 202, opacity: 1, message: true },
-    { y: 202, opacity: 1, message: true },
-    { y: 202, opacity: 1, message: true },
-    { y: 202, opacity: 1, message: true },
-    { y: 202, opacity: 1, message: true },
-    { y: 202, opacity: 1, message: true },
-    { y: 202, opacity: 1, message: true },
+    { y: 500, opacity: 0, message: false, delay: 50 },
+    ...Array.from({ length: 12 }, (_, index) => {
+      const progress = (index + 1) / 12;
+      const eased = 1 - (1 - progress) ** 3;
+      return { y: Math.round(500 + (202 - 500) * eased), opacity: eased, message: false, delay: 5 };
+    }),
+    { y: 202, opacity: 1, message: false, delay: 50 },
+    { y: 202, opacity: 1, message: true, delay: 430 },
   ];
 
-  for (const [offset, state] of states.entries()) {
+  for (const state of states) {
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
   <defs>
@@ -83,14 +74,16 @@ try {
     <text x="400" y="454" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-size="21" font-weight="700" fill="#ffb327">Never miss what matters.</text>
   </g>` : ""}
 </svg>`;
-    const svgPath = join(work, `tail-${offset}.svg`);
+    const svgPath = join(work, `tail-${frame}.svg`);
     writeFileSync(svgPath, svg);
-    run("magick", [svgPath, join(work, `frame-${String(offset + 39).padStart(2, "0")}.png`)]);
+    run("magick", [svgPath, join(work, `frame-${frame}.png`)]);
+    delays.push(state.delay);
+    frame += 1;
   }
 
   const input = [];
-  for (let frame = 0; frame < 58; frame += 1) {
-    input.push("-dispose", "Background", "-delay", String(delays[frame]), join(work, `frame-${String(frame).padStart(2, "0")}.png`));
+  for (let index = 0; index < delays.length; index += 1) {
+    input.push("-dispose", "Background", "-delay", String(delays[index]), join(work, `frame-${String(index).padStart(2, "0")}.png`));
   }
   run("magick", [...input, "-loop", "0", output]);
 } finally {
