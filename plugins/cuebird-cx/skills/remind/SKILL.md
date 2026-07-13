@@ -3,7 +3,7 @@ name: remind
 description: Set a phone reminder via Apple Reminders. Use PROACTIVELY when a concrete future deadline, checkpoint, waiting period, or "check back in N days/weeks" moment emerges in conversation — from the user's words OR from your own analysis and plans. Also when work enters a waiting period whose duration you can estimate (a condition with no stated date — estimate the timeframe from context). Also when the user explicitly asks to be reminded of something. Do not trigger for incidental/past dates with no action attached.
 ---
 
-# Cuebird: remind
+# Cuebird CX: remind
 
 You create Apple Reminders that sync to the user's iPhone via iCloud and fire
 there even when this Mac is off. Below, `$CUEBIRD` denotes the resolved
@@ -16,10 +16,10 @@ tool calls).
 Resolve `$CUEBIRD` using these methods, in order — never guess beyond them:
 1. If your skill invocation provides a "Base directory for this skill" (or
    equivalent), use it directly:
-   `CUEBIRD=<that-base>/../../scripts/cuebird.sh`
+   `CUEBIRD=<that-base>/../../scripts/cuebird-cx.sh`
 2. Otherwise, if the environment variable `PLUGIN_ROOT` is set in your Bash
-   environment, use `"$PLUGIN_ROOT/scripts/cuebird.sh"`.
-3. If neither is available, stop and tell the user Cuebird must be reinstalled;
+   environment, use `"$PLUGIN_ROOT/scripts/cuebird-cx.sh"`.
+3. If neither is available, stop and tell the user Cuebird CX must be reinstalled;
    do not guess an internal Codex installation path.
 
 ## When to offer (etiquette — non-negotiable)
@@ -59,10 +59,10 @@ Resolve `$CUEBIRD` using these methods, in order — never guess beyond them:
   if an entry with the same intent and date already exists (any status). If
   it exists as active, you may briefly confirm it's already set.
 - Time of day: if the user gave none, use the default hour from
-  `~/.codex/cuebird/config.json` (`default_hour`, default 9 → 09:00). Read
+  `~/.codex/cuebird-cx/config.json` (`default_hour`, default 9 → 09:00). Read
   it with:
   ```bash
-  default_hour=$(osascript -l JavaScript -e 'function run(a){try{var v=JSON.parse(a[0]).default_hour;return String(typeof v==="number"?v:9)}catch(e){return "9"}}' "$(cat ~/.codex/cuebird/config.json 2>/dev/null || echo '{}')")
+  default_hour=$(osascript -l JavaScript -e 'function run(a){try{var v=JSON.parse(a[0]).default_hour;return String(typeof v==="number"?v:9)}catch(e){return "9"}}' "$(cat ~/.codex/cuebird-cx/config.json 2>/dev/null || echo '{}')")
   ```
 - For periodic needs ("перевіряти раз на кілька днів") do NOT create several
   reminders — one reminder at the earliest meaningful date. If the user wants
@@ -127,7 +127,7 @@ Compose:
 
   ▶ Відкрий Codex у проєкті й скажи: «нагадування: <short key>»
 
-  — Cuebird
+  — Cuebird CX
   ```
 - **resume_prompt** — a SELF-CONTAINED continuation prompt for a future
   session with zero context: project path, state of things right now, what
@@ -149,7 +149,7 @@ Success prints `{"ok":true,...}` (exit 0). Confirm in ONE line:
 Apple-пристроях.»
 Any non-zero exit → see Failure table below; don't say the line above.
 
-**First use only** (no `~/.codex/cuebird/journal.jsonl` yet, or it's
+**First use only** (no `~/.codex/cuebird-cx/journal.jsonl` yet, or it's
 empty): run `"$CUEBIRD" health` first, before composing anything else.
 - Exit 0, prints `ok …` → proceed straight to creating.
 - Exit 0, prints `ok-local …` → this is the `ok-local` row in the Failure
@@ -170,6 +170,6 @@ After the first successful create, add one extra sentence: «Керувати
 |---|---|
 | exit 10 (from `add`, `health`, `complete`, or `cancel`) | «macOS заборонив доступ до Нагадувань. Увімкни: System Settings → Privacy & Security → Automation → (Codex або твій термінал) → Reminders — і повтори.» |
 | `health` → `ok-local` | «Нагадування створиться лише на цьому Mac — iPhone його не побачить. Увімкни Reminders в iCloud (System Settings → Apple ID → iCloud). Створити локально все одно?» |
-| exit 11 (from `add`) | «Не зміг підтвердити створення — перевір список Codex Projects у Нагадуваннях. Запусти Cuebird doctor, якщо повториться.» (the reminder may or may not actually exist — that's exactly why this points at the list instead of asserting failure either way) |
-| exit 12 | Look at stderr first, for the substrings `journal write failed` or `reminder created:`. If either appears, the Reminders-side action already succeeded (a reminder was created by `add`, or its state was changed by `complete`/`cancel`) and only the local tracking write failed — say so honestly, e.g. «Нагадування створено, але я не зберіг запис локально — перевір список Codex Projects; спробую дозаписати пізніше.» Never call this an outright failure when either substring is present. If neither substring appears, it's a genuine failure: «Щось пішло не так із застосунком Нагадування. Запусти Cuebird doctor.» |
+| exit 11 (from `add`) | «Не зміг підтвердити створення — перевір список Codex Projects у Нагадуваннях. Запусти Cuebird CX doctor, якщо повториться.» (the reminder may or may not actually exist — that's exactly why this points at the list instead of asserting failure either way) |
+| exit 12 | Look at stderr first, for the substrings `journal write failed` or `reminder created:`. If either appears, the Reminders-side action already succeeded (a reminder was created by `add`, or its state was changed by `complete`/`cancel`) and only the local tracking write failed — say so honestly, e.g. «Нагадування створено, але я не зберіг запис локально — перевір список Codex Projects; спробую дозаписати пізніше.» Never call this an outright failure when either substring is present. If neither substring appears, it's a genuine failure: «Щось пішло не так із застосунком Нагадування. Запусти Cuebird CX doctor.» |
 | exit 2 (past date, calendar-invalid date like Feb 30, empty title) | Composition error on your side, never the user's — fix and retry silently, don't surface raw text. For an impossible date, stderr names the normalized date it tried (e.g. "did you mean 2026-03-02T09:00?"); use that, or otherwise recompute a valid future date yourself, and retry. Ask the user only if their intent was genuinely ambiguous. |

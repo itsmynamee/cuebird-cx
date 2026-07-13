@@ -1,14 +1,14 @@
 {
-  "name": "cuebird",
+  "name": "cuebird-cx",
   "interface": {
-    "displayName": "Cuebird"
+    "displayName": "Cuebird CX"
   },
   "plugins": [
     {
-      "name": "cuebird",
+      "name": "cuebird-cx",
       "source": {
         "source": "local",
-        "path": "./plugins/cuebird"
+        "path": "./plugins/cuebird-cx"
       },
       "policy": {
         "installation": "AVAILABLE",

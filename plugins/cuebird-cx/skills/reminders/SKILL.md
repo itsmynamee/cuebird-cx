@@ -1,9 +1,9 @@
 ---
 name: reminders
-description: Review and manage every Cuebird decision — active phone reminders, past ones, declined and deferred offers. Use when the user asks what reminders exist, wants to change/cancel/re-enable one, revisit a "no", or clean up history.
+description: Review and manage every Cuebird CX decision — active phone reminders, past ones, declined and deferred offers. Use when the user asks what reminders exist, wants to change/cancel/re-enable one, revisit a "no", or clean up history.
 ---
 
-# Cuebird: reminders (the journal)
+# Cuebird CX: reminders (the journal)
 
 The journal records every decision ever made about a reminder — accepted,
 declined, deferred, done, cancelled. The Reminders app owns notification
@@ -17,10 +17,10 @@ one single bash invocation, never across separate tool calls).
 Resolve `$CUEBIRD` using these methods, in order — never guess beyond them:
 1. If your skill invocation provides a "Base directory for this skill" (or
    equivalent), use it directly:
-   `CUEBIRD=<that-base>/../../scripts/cuebird.sh`
+   `CUEBIRD=<that-base>/../../scripts/cuebird-cx.sh`
 2. Otherwise, if the environment variable `PLUGIN_ROOT` is set in your Bash
-   environment, use `"$PLUGIN_ROOT/scripts/cuebird.sh"`.
-3. If neither is available, stop and tell the user Cuebird must be reinstalled;
+   environment, use `"$PLUGIN_ROOT/scripts/cuebird-cx.sh"`.
+3. If neither is available, stop and tell the user Cuebird CX must be reinstalled;
    do not guess an internal Codex installation path.
 
 ### Shell safety (read before running any command below)

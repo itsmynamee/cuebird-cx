@@ -3,7 +3,7 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 export CUEBIRD_STATE_DIR=$(mktemp -d) MOCK_DB=$(mktemp)
 export CUEBIRD_ADAPTER="$PWD/tests/mock-adapter.sh"
-N="plugins/cuebird/scripts/cuebird.sh"
+N="plugins/cuebird-cx/scripts/cuebird-cx.sh"
 fail() { echo "FAIL: $1"; exit 1; }
 expect_rc2() { "$N" "$@" >/dev/null 2>&1; [ $? -eq 2 ] || fail "expected exit 2: $N $*"; }
 

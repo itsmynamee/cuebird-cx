@@ -1,25 +1,25 @@
-# Cuebird for Codex
+# Cuebird CX
 
-[![Tests](https://github.com/itsmynamee/cuebird-codex/actions/workflows/test.yml/badge.svg)](https://github.com/itsmynamee/cuebird-codex/actions/workflows/test.yml)
-[![Release](https://img.shields.io/github/v/release/itsmynamee/cuebird-codex)](https://github.com/itsmynamee/cuebird-codex/releases)
+[![Tests](https://github.com/itsmynamee/cuebird-cx/actions/workflows/test.yml/badge.svg)](https://github.com/itsmynamee/cuebird-cx/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/itsmynamee/cuebird-cx)](https://github.com/itsmynamee/cuebird-cx/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](#requirements)
 
 **Mention a deadline once. Get a verified reminder on your Apple devices —
 with enough project context for Codex to resume the work later.**
 
-![Cuebird animated preview](docs/demo.gif)
+![Cuebird CX animated preview](docs/demo.gif)
 
-Cuebird adds four focused skills and a `SessionStart` hook to Codex. When a
+Cuebird CX adds four focused skills and a `SessionStart` hook to Codex. When a
 future checkpoint appears in a task, it offers once to create an Apple
 Reminder. Accepted reminders are read back for verification and recorded in a
 local journal with the project path and a self-contained continuation prompt.
 
-## Why Cuebird
+## Why Cuebird CX
 
 - **Survives the session:** reminders fire on your Apple devices even when the
   Mac is off and Codex is closed.
-- **Verified delivery path:** Cuebird reads every new reminder back before
+- **Verified delivery path:** Cuebird CX reads every new reminder back before
   reporting success.
 - **Context comes back:** say `reminder: <key>` later and Codex can restore the
   saved project context and next steps.
@@ -36,21 +36,21 @@ local journal with the project path and a self-contained continuation prompt.
 ## Install
 
 ```bash
-codex plugin marketplace add itsmynamee/cuebird-codex
-codex plugin add cuebird@cuebird
+codex plugin marketplace add itsmynamee/cuebird-cx
+codex plugin add cuebird-cx@cuebird-cx
 ```
 
-Review and trust Cuebird's `SessionStart` hook when Codex prompts you. Start a
+Review and trust Cuebird CX's `SessionStart` hook when Codex prompts you. Start a
 new task after installation so Codex loads the skills and hook.
 
-You can also install **Cuebird** from the Plugins directory in the Codex desktop
+You can also install **Cuebird CX** from the Plugins directory in the Codex desktop
 app after adding the marketplace.
 
 ## How it works
 
 1. The session hook tells Codex to notice actionable future checkpoints.
 2. Codex offers one meaningful reminder at a natural pause.
-3. After consent, Cuebird creates the reminder and verifies it by reading it back.
+3. After consent, Cuebird CX creates the reminder and verifies it by reading it back.
 4. A local journal stores the project, context, and continuation prompt.
 5. When the reminder fires, `reminder: <key>` restores the work context.
 
@@ -65,8 +65,8 @@ app after adding the marketplace.
 
 - Reminder content is stored in Apple Reminders and synced according to your
   iCloud settings.
-- The decision journal stays on your Mac under `~/.codex/cuebird/`.
-- Cuebird has no telemetry and makes no automatic network requests.
+- The decision journal stays on your Mac under `~/.codex/cuebird-cx/`.
+- Cuebird CX has no telemetry and makes no automatic network requests.
 - The only network request is the explicit `doctor` update check against the
   public GitHub Releases API.
 
@@ -79,8 +79,8 @@ complete, delete, and final missing-state verification.
 ## Development
 
 ```bash
-git clone https://github.com/itsmynamee/cuebird-codex.git
-cd cuebird-codex
+git clone https://github.com/itsmynamee/cuebird-cx.git
+cd cuebird-cx
 bash tests/run.sh
 ```
 
@@ -97,7 +97,7 @@ Automation permission.
 
 ## Scope
 
-Cuebird 0.2 supports Apple Reminders on macOS. Recurring reminders,
+Cuebird CX 0.2 supports Apple Reminders on macOS. Recurring reminders,
 Windows/Linux delivery, Android delivery, and hosted notification services are
 intentionally out of scope until real usage justifies another adapter.
 

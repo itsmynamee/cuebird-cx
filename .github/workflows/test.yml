@@ -15,9 +15,9 @@ jobs:
       - name: Validate JSON
         run: |
           python3 -m json.tool .agents/plugins/marketplace.json >/dev/null
-          python3 -m json.tool plugins/cuebird/.codex-plugin/plugin.json >/dev/null
-          python3 -m json.tool plugins/cuebird/hooks/hooks.json >/dev/null
+          python3 -m json.tool plugins/cuebird-cx/.codex-plugin/plugin.json >/dev/null
+          python3 -m json.tool plugins/cuebird-cx/hooks/hooks.json >/dev/null
       - name: Check shell syntax
-        run: bash -n plugins/cuebird/hooks/session-start.sh plugins/cuebird/scripts/cuebird.sh plugins/cuebird/scripts/adapters/apple-reminders.sh tests/*.sh
+        run: bash -n plugins/cuebird-cx/hooks/session-start.sh plugins/cuebird-cx/scripts/cuebird-cx.sh plugins/cuebird-cx/scripts/adapters/apple-reminders.sh tests/*.sh
       - name: Run machine-independent suite
         run: bash tests/run.sh

@@ -1,9 +1,9 @@
 ---
 name: doctor
-description: Cuebird self-diagnostics. Use when reminders fail to create, the user doubts phone delivery, asks whether Cuebird works, or wants to check for plugin updates.
+description: Cuebird CX self-diagnostics. Use when reminders fail to create, the user doubts phone delivery, asks whether Cuebird CX works, or wants to check for plugin updates.
 ---
 
-# Cuebird: doctor
+# Cuebird CX: doctor
 
 Below, `$CUEBIRD` denotes the resolved absolute path to the CLI — it is
 notation, not a shell variable: each bash command you run is its own fresh
@@ -14,10 +14,10 @@ invocation, never across separate tool calls).
 Resolve `$CUEBIRD` using these methods, in order — never guess beyond them:
 1. If your skill invocation provides a "Base directory for this skill" (or
    equivalent), use it directly:
-   `CUEBIRD=<that-base>/../../scripts/cuebird.sh`
+   `CUEBIRD=<that-base>/../../scripts/cuebird-cx.sh`
 2. Otherwise, if the environment variable `PLUGIN_ROOT` is set in your Bash
-   environment, use `"$PLUGIN_ROOT/scripts/cuebird.sh"`.
-3. If neither is available, stop and tell the user Cuebird must be reinstalled;
+   environment, use `"$PLUGIN_ROOT/scripts/cuebird-cx.sh"`.
+3. If neither is available, stop and tell the user Cuebird CX must be reinstalled;
    do not guess an internal Codex installation path.
 
 The plugin root (for check 7's `plugin.json`) is `$CUEBIRD`'s grandparent
@@ -36,7 +36,7 @@ run all seven, since later checks are still informative even if an earlier
 one fails.
 
 1. **System**: `uname` is `Darwin` and `command -v osascript` succeeds.
-   ✗fix: Cuebird v1 works only on macOS.
+   ✗fix: Cuebird CX v1 works only on macOS.
 
 2. **Permission**: `osascript -e 'tell application "Reminders" to count accounts'`.
    Nonzero exit, or output containing `-1743` / `Not authorized` → ✗fix:
@@ -69,7 +69,7 @@ one fails.
 6. **State**: the journal is a cache; Reminders is the source of truth, so
    journal issues are ✓/⚠, never a hard ✗ on their own.
    ```bash
-   raw=$(grep -c . ~/.codex/cuebird/journal.jsonl 2>/dev/null); raw=${raw:-0}
+   raw=$(grep -c . ~/.codex/cuebird-cx/journal.jsonl 2>/dev/null); raw=${raw:-0}
    out=$("$CUEBIRD" list all); rc=$?
    ```
    Read `raw` (count of non-empty lines — historical blank lines are
@@ -78,7 +78,7 @@ one fails.
      `list all` exits 0 on a genuinely empty journal, so `rc` should be 0
      here too — dir writability was already proven by `"$CUEBIRD"
      health`/`selftest` succeeding above.
-   - `raw` > 0 and `rc` ≠ 0 → ✗fix: перевір `~/.codex/cuebird/` — я можу
+   - `raw` > 0 and `rc` ≠ 0 → ✗fix: перевір `~/.codex/cuebird-cx/` — я можу
      показати, що там.
    - `raw` > 0 and `rc` = 0 → ✓. Then run the direct parse-count one-liner
      below against the journal to find lines that fail to parse as JSON —
@@ -97,7 +97,7 @@ one fails.
        let bad=0,total=0;
        ObjC.unwrap(s).split("\n").filter(l=>l.trim()).forEach(l=>{total++;try{JSON.parse(l)}catch(e){bad++}});
        return "total="+total+" bad="+bad;
-     }' "$HOME/.codex/cuebird/journal.jsonl"
+     }' "$HOME/.codex/cuebird-cx/journal.jsonl"
      ```
      Parse `bad` from the output:
      - `bad` = 0 → ✓, no further note needed.
@@ -105,12 +105,12 @@ one fails.
        рядків у журналі — записи пропущено; Reminders лишається джерелом
        правди» (fill in N = `bad`).
 
-7. **Updates** (the ONLY network call in Cuebird, run just for this check,
+7. **Updates** (the ONLY network call in Cuebird CX, run just for this check,
    never blocking any other check):
    ```bash
    local_version=$(grep -m1 '"version"' "$PLUGIN_ROOT/.codex-plugin/plugin.json" \
      | sed -E 's/.*"version": *"([^"]+)".*/\1/')
-   gh_out=$(curl -s --max-time 5 https://api.github.com/repos/itsmynamee/cuebird-codex/releases/latest)
+   gh_out=$(curl -s --max-time 5 https://api.github.com/repos/itsmynamee/cuebird-cx/releases/latest)
    curl_rc=$?
    ```
    - `curl_rc` ≠ 0 (timeout, no network, DNS failure) → ✓ (informational,
@@ -118,7 +118,7 @@ one fails.
    - `curl_rc` = 0 but the body has no `tag_name` (e.g. `"message": "Not
      Found"` — no release published yet, or the repo doesn't exist yet) →
      ✓: «пропущено (реліз ще не опубліковано)». This is the current real
-     state before the first `cuebird-codex` release — expect this path, not the network-skip
+     state before the first `cuebird-cx` release — expect this path, not the network-skip
      path, until the first GitHub release is published.
    - Otherwise extract `tag_name`, strip a leading `v`, and compare semantic
      versions. Only report an update when the published major/minor/patch is
@@ -126,7 +126,7 @@ one fails.
      <local_version>.» Installed newer → ✓: «Встановлена <local_version>;
      останній публічний реліз <tag>.» Never call any mere mismatch an update.
 
-End with one honest summary line: all green (✓/⚠ only, no ✗) → «Cuebird
+End with one honest summary line: all green (✓/⚠ only, no ✗) → «Cuebird CX
 повністю справний — нагадування долетять.» Any ✗ → name the single most
 important fix first (permission/iCloud issues block everything downstream,
 so lead with the earliest failing check in the 1→6 order, not check 7 —

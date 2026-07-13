@@ -1,5 +1,5 @@
 #!/bin/bash
-# Cuebird delivery adapter: Apple Reminders. ALL AppleScript lives here.
+# Cuebird CX delivery adapter: Apple Reminders. ALL AppleScript lives here.
 # Contract (spec §12): add | list | status | complete | delete | health
 set -uo pipefail
 LIST="${CUEBIRD_LIST:-Codex Projects}"

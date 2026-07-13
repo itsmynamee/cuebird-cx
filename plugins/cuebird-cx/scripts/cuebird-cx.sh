@@ -1,9 +1,18 @@
 #!/bin/bash
-# Cuebird CLI façade. Skills call this and never the adapter directly.
+# Cuebird CX CLI façade. Skills call this and never the adapter directly.
 # Commands: add | log | list | get | cancel | complete | due-deferrals | prune | health | selftest
 set -uo pipefail
 SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-STATE_DIR="${CUEBIRD_STATE_DIR:-$HOME/.codex/cuebird}"
+if [ -n "${CUEBIRD_STATE_DIR:-}" ]; then
+  STATE_DIR="$CUEBIRD_STATE_DIR"
+else
+  STATE_DIR="$HOME/.codex/cuebird-cx"
+  LEGACY_STATE_DIR="$HOME/.codex/cuebird"
+  if [ ! -e "$STATE_DIR" ] && [ -d "$LEGACY_STATE_DIR" ]; then
+    mv "$LEGACY_STATE_DIR" "$STATE_DIR" \
+      || { echo "failed to migrate state to $STATE_DIR" >&2; exit 2; }
+  fi
+fi
 ADAPTER="${CUEBIRD_ADAPTER:-$SELF_DIR/adapters/apple-reminders.sh}"
 JOURNAL="$STATE_DIR/journal.jsonl"
 OSA=/usr/bin/osascript
@@ -240,11 +249,11 @@ case "$cmd" in
     # this must work from an installed plugin). Journal ops in a temp dir.
     st_fail() { echo "SELFTEST FAILED: $1"; exit 1; }
     tdir=$(mktemp -d)
-    tid=$(CUEBIRD_STATE_DIR="$tdir" "$SELF_DIR/cuebird.sh" log declined "selftest" "-") || st_fail "journal write"
-    CUEBIRD_STATE_DIR="$tdir" "$SELF_DIR/cuebird.sh" get "$tid" >/dev/null || st_fail "journal read"
+    tid=$(CUEBIRD_STATE_DIR="$tdir" "$SELF_DIR/cuebird-cx.sh" log declined "selftest" "-") || st_fail "journal write"
+    CUEBIRD_STATE_DIR="$tdir" "$SELF_DIR/cuebird-cx.sh" get "$tid" >/dev/null || st_fail "journal read"
     export CUEBIRD_LIST="Codex Projects Test"
     y=$(date -v+1d +%Y); m=$(date -v+1d +%m); d=$(date -v+1d +%d)
-    rid=$("$ADAPTER" add "$y" "$m" "$d" 10 30 "Cuebird selftest" "created and removed by Cuebird doctor") || st_fail "adapter add"
+    rid=$("$ADAPTER" add "$y" "$m" "$d" 10 30 "Cuebird CX selftest" "created and removed by Cuebird CX doctor") || st_fail "adapter add"
     [ "$("$ADAPTER" status "$rid")" = "pending" ] || st_fail "status after add"
     "$ADAPTER" complete "$rid" || st_fail "complete"
     "$ADAPTER" delete "$rid"   || st_fail "delete"

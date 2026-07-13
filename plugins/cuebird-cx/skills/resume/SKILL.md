@@ -1,9 +1,9 @@
 ---
 name: resume
-description: Continue work from a fired Cuebird reminder. Use when the user says a reminder arrived / mentions «нагадування: …» / references a notification about a deadline or checkpoint, and wants to pick the work back up.
+description: "Continue work from a fired Cuebird CX reminder. Use when the user says a reminder arrived / mentions «нагадування: …» / references a notification about a deadline or checkpoint, and wants to pick the work back up."
 ---
 
-# Cuebird: resume
+# Cuebird CX: resume
 
 Below, `$CUEBIRD` denotes the resolved absolute path to the CLI — it is
 notation, not a shell variable: each bash command you run is its own fresh
@@ -14,10 +14,10 @@ invocation, never across separate tool calls).
 Resolve `$CUEBIRD` using these methods, in order — never guess beyond them:
 1. If your skill invocation provides a "Base directory for this skill" (or
    equivalent), use it directly:
-   `CUEBIRD=<that-base>/../../scripts/cuebird.sh`
+   `CUEBIRD=<that-base>/../../scripts/cuebird-cx.sh`
 2. Otherwise, if the environment variable `PLUGIN_ROOT` is set in your Bash
-   environment, use `"$PLUGIN_ROOT/scripts/cuebird.sh"`.
-3. If neither is available, stop and tell the user Cuebird must be reinstalled;
+   environment, use `"$PLUGIN_ROOT/scripts/cuebird-cx.sh"`.
+3. If neither is available, stop and tell the user Cuebird CX must be reinstalled;
    do not guess an internal Codex installation path.
 
 The journal stored everything a fresh session needs. Your job: restore
@@ -70,7 +70,7 @@ escaped literal `'`, reopen the quote).
      ask the user to point at one or describe it in a sentence.
    - **Journal genuinely empty** (`list all` returns nothing at all, not just
      no match) → be honest there's nothing to resume from: «У журналі
-     Cuebird ще немає жодного нагадування — тож підхопити нема що. Розкажи,
+     Cuebird CX ще немає жодного нагадування — тож підхопити нема що. Розкажи,
      про що йшлося, і продовжимо просто з розмови.»
 
 2. `"$CUEBIRD" get '<id>'` → read `resume_prompt`, `project_path`, `context`.

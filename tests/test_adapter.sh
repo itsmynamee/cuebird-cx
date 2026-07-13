@@ -3,7 +3,7 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export CUEBIRD_LIST="Codex Projects Test"
-A="plugins/cuebird/scripts/adapters/apple-reminders.sh"
+A="plugins/cuebird-cx/scripts/adapters/apple-reminders.sh"
 fail() { echo "FAIL: $1"; exit 1; }
 
 out=$("$A" health) || fail "health exited nonzero: $out"
@@ -13,8 +13,8 @@ acct_part="${out#ok }"; acct_part="${acct_part#ok-local }"; acct_part="${acct_pa
 echo "PASS: health"
 
 Y=$(date -v+1d +%Y); M=$(date -v+1d +%m); D=$(date -v+1d +%d)
-rid=$("$A" add "$Y" "$M" "$D" 10 30 "Cuebird selftest" "body line 1
-line 2 — created by Cuebird test") || fail "add failed"
+rid=$("$A" add "$Y" "$M" "$D" 10 30 "Cuebird CX selftest" "body line 1
+line 2 — created by Cuebird CX test") || fail "add failed"
 [ -n "$rid" ] || fail "add printed empty id"
 echo "PASS: add ($rid)"
 

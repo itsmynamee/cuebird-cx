@@ -1,27 +1,27 @@
 {
-  "name": "cuebird",
-  "version": "0.2.0",
+  "name": "cuebird-cx",
+  "version": "0.2.1",
   "description": "Deadline-aware Codex. Turn project checkpoints into verified Apple Reminders and resume with saved context.",
   "author": {
     "name": "itsmynamee",
     "url": "https://github.com/itsmynamee"
   },
-  "homepage": "https://github.com/itsmynamee/cuebird-codex",
-  "repository": "https://github.com/itsmynamee/cuebird-codex",
+  "homepage": "https://github.com/itsmynamee/cuebird-cx",
+  "repository": "https://github.com/itsmynamee/cuebird-cx",
   "license": "MIT",
   "keywords": ["codex", "reminders", "deadlines", "apple-reminders", "productivity"],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Cuebird",
+    "displayName": "Cuebird CX",
     "shortDescription": "Project reminders that bring their context back",
-    "longDescription": "Cuebird notices actionable checkpoints, creates verified Apple Reminders, and keeps a local journal so Codex can resume the work later.",
+    "longDescription": "Cuebird CX notices actionable checkpoints, creates verified Apple Reminders, and keeps a local journal so Codex can resume the work later.",
     "developerName": "itsmynamee",
     "category": "Productivity",
     "capabilities": ["Interactive", "Write"],
-    "websiteURL": "https://github.com/itsmynamee/cuebird-codex",
+    "websiteURL": "https://github.com/itsmynamee/cuebird-cx",
     "defaultPrompt": [
       "Remind me about this project's next checkpoint.",
-      "Show my Cuebird reminders.",
+      "Show my Cuebird CX reminders.",
       "Resume the work from a reminder that fired."
     ],
     "brandColor": "#5B7CFA"

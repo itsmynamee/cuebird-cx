@@ -3,7 +3,7 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 export CUEBIRD_STATE_DIR=$(mktemp -d) MOCK_DB=$(mktemp)
 export CUEBIRD_ADAPTER="$PWD/tests/mock-adapter.sh"
-N="plugins/cuebird/scripts/cuebird.sh"
+N="plugins/cuebird-cx/scripts/cuebird-cx.sh"
 fail() { echo "FAIL: $1"; exit 1; }
 
 id1=$(CUEBIRD_PROJECT="ProjA" "$N" log declined "skip me" "2026-08-01T09:00") || fail "log declined"
@@ -71,5 +71,13 @@ CUEBIRD_STATE_DIR="$CF" "$N" get "$cfid" | grep -q '"project":"ProjCF"' || fail 
 EMPTY=$(mktemp -d)
 CUEBIRD_STATE_DIR="$EMPTY" "$N" list all >/dev/null 2>&1 || fail "list all on empty journal must exit 0"
 [ -z "$(CUEBIRD_STATE_DIR="$EMPTY" "$N" list all)" ] || fail "list all on empty journal must print nothing"
+
+# Old 0.2 state is moved once to the renamed project directory.
+MIG_HOME=$(mktemp -d)
+mkdir -p "$MIG_HOME/.codex/cuebird"
+printf '%s\n' '{"id":"nm_migrate","status":"declined","title":"migrate me","created_at":"2026-07-13T00:00:00Z"}' > "$MIG_HOME/.codex/cuebird/journal.jsonl"
+HOME="$MIG_HOME" CUEBIRD_STATE_DIR= "$N" list declined | grep -q '"migrate me"' || fail "legacy state not readable after migration"
+[ -d "$MIG_HOME/.codex/cuebird-cx" ] || fail "renamed state directory missing after migration"
+[ ! -e "$MIG_HOME/.codex/cuebird" ] || fail "legacy state directory remained after migration"
 
 echo "ALL JOURNAL TESTS PASSED"

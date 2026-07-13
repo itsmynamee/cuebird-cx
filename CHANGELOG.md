@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1] — 2026-07-13
+
+- Renamed the repository, marketplace, plugin id, package directory, and CLI
+  consistently to `cuebird-cx`.
+- Added one-time migration from `~/.codex/cuebird/` to
+  `~/.codex/cuebird-cx/` so existing reminder context is preserved.
+- Fixed invalid YAML quoting in the `resume` skill metadata.
+
 ## [0.2.0] — 2026-07-13
 
 Initial Codex release.

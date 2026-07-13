@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "\"${PLUGIN_ROOT}/hooks/session-start.sh\"",
-            "statusMessage": "Loading Cuebird reminders"
+            "statusMessage": "Loading Cuebird CX reminders"
           }
         ]
       }
