@@ -1,0 +1,20 @@
+{
+  "name": "cuebird",
+  "interface": {
+    "displayName": "Cuebird"
+  },
+  "plugins": [
+    {
+      "name": "cuebird",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cuebird"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
