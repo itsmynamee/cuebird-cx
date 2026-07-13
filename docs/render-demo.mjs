@@ -8,6 +8,11 @@ import { join } from "node:path";
 const docs = new URL(".", import.meta.url).pathname;
 const output = join(docs, "demo.gif");
 const work = mkdtempSync(join(tmpdir(), "cuebird-demo-"));
+const delays = [
+  20, 20, 20, 20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+  50, 20, 20, 20, 60, 40, 120, 10, 10, 50, 40, 220, 10, 10, 10, 10, 10, 50, 10, 10, 10, 10,
+  10, 10, 10, 10, 10, 10, 10, 90, 10, 10, 10, 10, 10, 290,
+];
 
 const run = (command, args) => execFileSync(command, args, { stdio: "inherit" });
 const original = execFileSync("git", ["show", "HEAD:docs/demo.gif"]);
@@ -32,25 +37,25 @@ try {
   }
 
   const states = [
-    { y: 500, opacity: 0, message: 0 },
-    { y: 360, opacity: 0.18, message: 0 },
-    { y: 300, opacity: 0.38, message: 0 },
-    { y: 250, opacity: 0.62, message: 0 },
-    { y: 220, opacity: 0.82, message: 0 },
-    { y: 204, opacity: 1, message: 0 },
-    { y: 202, opacity: 1, message: 0 },
-    { y: 202, opacity: 1, message: 0.25 },
-    { y: 202, opacity: 1, message: 0.55 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
-    { y: 202, opacity: 1, message: 1 },
+    { y: 500, opacity: 0, message: false },
+    { y: 360, opacity: 0.18, message: false },
+    { y: 300, opacity: 0.38, message: false },
+    { y: 250, opacity: 0.62, message: false },
+    { y: 220, opacity: 0.82, message: false },
+    { y: 204, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: false },
+    { y: 202, opacity: 1, message: true },
+    { y: 202, opacity: 1, message: true },
+    { y: 202, opacity: 1, message: true },
+    { y: 202, opacity: 1, message: true },
+    { y: 202, opacity: 1, message: true },
+    { y: 202, opacity: 1, message: true },
+    { y: 202, opacity: 1, message: true },
   ];
 
   for (const [offset, state] of states.entries()) {
@@ -73,10 +78,10 @@ try {
     <text x="184" y="59" font-family="Helvetica Neue, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">Ship the feature</text>
     <text x="184" y="81" font-family="Helvetica Neue, Arial, sans-serif" font-size="14" fill="#c5c6cc">Set two weeks ago, in Codex</text>
   </g>
-  <g opacity="${state.message}">
+  ${state.message ? `<g>
     <text x="400" y="423" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-size="14" fill="#a7a8b0">Mention it once.</text>
     <text x="400" y="454" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-size="21" font-weight="700" fill="#ffb327">Never miss what matters.</text>
-  </g>
+  </g>` : ""}
 </svg>`;
     const svgPath = join(work, `tail-${offset}.svg`);
     writeFileSync(svgPath, svg);
@@ -85,7 +90,7 @@ try {
 
   const input = [];
   for (let frame = 0; frame < 58; frame += 1) {
-    input.push("-dispose", "Background", "-delay", frame < 39 ? "10" : frame === 57 ? "290" : "10", join(work, `frame-${String(frame).padStart(2, "0")}.png`));
+    input.push("-dispose", "Background", "-delay", String(delays[frame]), join(work, `frame-${String(frame).padStart(2, "0")}.png`));
   }
   run("magick", [...input, "-loop", "0", output]);
 } finally {
