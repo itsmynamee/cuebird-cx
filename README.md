@@ -4,6 +4,7 @@
 [![Release](https://img.shields.io/github/v/release/itsmynamee/cuebird-cx)](https://github.com/itsmynamee/cuebird-cx/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](#requirements)
+[![Agent: Codex](https://img.shields.io/badge/agent-Codex-111827.svg?logo=openai&logoColor=white)](https://github.com/openai/codex)
 
 **Mention a deadline once. Get a verified reminder on your Apple devices —
 with enough project context for Codex to resume the work later.**
